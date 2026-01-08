@@ -1,0 +1,978 @@
+{
+  "errors": {
+    "total": 3000,
+    "correct": 2021,
+    "accuracy": 0.6736666666666666,
+    "false_positives": 219,
+    "false_negatives": 760,
+    "by_feature": {
+      "is_show_hn": {
+        "count": 185,
+        "accuracy": 0.7891891891891892,
+        "fp_rate": 0.08108108108108109,
+        "fn_rate": 0.12972972972972974
+      },
+      "is_ask_hn": {
+        "count": 45,
+        "accuracy": 0.7555555555555555,
+        "fp_rate": 0.0,
+        "fn_rate": 0.24444444444444444
+      },
+      "is_github": {
+        "count": 292,
+        "accuracy": 0.708904109589041,
+        "fp_rate": 0.10273972602739725,
+        "fn_rate": 0.18835616438356165
+      },
+      "has_question": {
+        "count": 167,
+        "accuracy": 0.5808383233532934,
+        "fp_rate": 0.029940119760479042,
+        "fn_rate": 0.38922155688622756
+      },
+      "has_pdf": {
+        "count": 29,
+        "accuracy": 0.6896551724137931,
+        "fp_rate": 0.0,
+        "fn_rate": 0.3103448275862069
+      },
+      "has_number": {
+        "count": 743,
+        "accuracy": 0.6621803499327052,
+        "fp_rate": 0.08344549125168237,
+        "fn_rate": 0.2543741588156124
+      }
+    },
+    "worst_false_positives": [
+      {
+        "title": "JermCAD: Browser-Based CAD Software",
+        "prob": 0.7358540296554565,
+        "points": 62,
+        "domain": "github.com"
+      },
+      {
+        "title": "Octo: A Chip8 IDE",
+        "prob": 0.7096202969551086,
+        "points": 94,
+        "domain": "github.com"
+      },
+      {
+        "title": "Drunk CSS",
+        "prob": 0.7075003981590271,
+        "points": 97,
+        "domain": "shkspr.mobi"
+      },
+      {
+        "title": "Implementing a Kalman Filter in Postgres",
+        "prob": 0.701491117477417,
+        "points": 71,
+        "domain": "neon.com"
+      },
+      {
+        "title": "Drawww \u2013 A drawing canvas for the web powered by WebAssembly",
+        "prob": 0.6997827291488647,
+        "points": 1,
+        "domain": "drawww.net"
+      },
+      {
+        "title": "Slax: Live Pocket Linux",
+        "prob": 0.699716329574585,
+        "points": 73,
+        "domain": "slax.org"
+      },
+      {
+        "title": "Reverse Engineering Hyperliquid",
+        "prob": 0.6985368728637695,
+        "points": 25,
+        "domain": "blog.can.ac"
+      },
+      {
+        "title": "It's mainframes all the way down",
+        "prob": 0.6965206861495972,
+        "points": 4,
+        "domain": "medium.com"
+      },
+      {
+        "title": "Gimp Source Code",
+        "prob": 0.6964632272720337,
+        "points": 24,
+        "domain": "gitlab.gnome.org"
+      },
+      {
+        "title": "Durin is a library for reading and writing the Dwarf debugging format",
+        "prob": 0.6952723264694214,
+        "points": 75,
+        "domain": "github.com"
+      },
+      {
+        "title": "Show HN: SonicJS \u2013 Open-Source Headless CMS for Cloudflare Workers",
+        "prob": 0.6948819756507874,
+        "points": 1,
+        "domain": "github.com"
+      },
+      {
+        "title": "SIMD City: Auto-Vectorisation",
+        "prob": 0.6948674917221069,
+        "points": 63,
+        "domain": "xania.org"
+      },
+      {
+        "title": "GNOME: Disable primary-paste by default",
+        "prob": 0.6924795508384705,
+        "points": 1,
+        "domain": "gitlab.gnome.org"
+      },
+      {
+        "title": "Ty \u2013 A fast Python type checker, written in Rust",
+        "prob": 0.6884134411811829,
+        "points": 77,
+        "domain": "docs.astral.sh"
+      },
+      {
+        "title": "Gemini 3 fails at simple geometry",
+        "prob": 0.6878485679626465,
+        "points": 1,
+        "domain": ""
+      },
+      {
+        "title": "Apex: Universal Markdown Processor",
+        "prob": 0.682259738445282,
+        "points": 29,
+        "domain": "brettterpstra.com"
+      },
+      {
+        "title": "Claude, the albino alligator, has died",
+        "prob": 0.6819810271263123,
+        "points": 20,
+        "domain": "abc7news.com"
+      },
+      {
+        "title": "Publishing my bachelor's thesis in applied mathematics",
+        "prob": 0.6815329194068909,
+        "points": 1,
+        "domain": "timktitarev.wordpress.com"
+      },
+      {
+        "title": "ANTML: Anthropic\u2019s Markup Language",
+        "prob": 0.6797166466712952,
+        "points": 54,
+        "domain": "karashiiro.leaflet.pub"
+      },
+      {
+        "title": "How we SSH into GitHub Actions",
+        "prob": 0.6785940527915955,
+        "points": 2,
+        "domain": "blacksmith.sh"
+      }
+    ],
+    "worst_false_negatives": [
+      {
+        "title": "China's 200M gig workers are a warning for the world",
+        "prob": 0.03692854940891266,
+        "points": 111,
+        "domain": "economist.com"
+      },
+      {
+        "title": "Tech CEOs Take Turns Praising Trump at White House Dinner",
+        "prob": 0.037374913692474365,
+        "points": 104,
+        "domain": "wsj.com"
+      },
+      {
+        "title": "'No idea who he is', says Trump after pardoning crypto tycoon",
+        "prob": 0.038788557052612305,
+        "points": 174,
+        "domain": "bbc.com"
+      },
+      {
+        "title": "China reaches energy milestone by \"breeding\" uranium from thorium",
+        "prob": 0.0416213758289814,
+        "points": 341,
+        "domain": "scmp.com"
+      },
+      {
+        "title": "Trump designates anti-fascist Antifa movement as a terrorist organization",
+        "prob": 0.04455064609646797,
+        "points": 120,
+        "domain": "reuters.com"
+      },
+      {
+        "title": "South Korea's President says US investment demands would spark financial crisis",
+        "prob": 0.049048516899347305,
+        "points": 258,
+        "domain": "cnbc.com"
+      },
+      {
+        "title": "Claude Code vs. Codex: I built a sentiment dashboard from Reddit comments",
+        "prob": 0.05124920606613159,
+        "points": 141,
+        "domain": "aiengineering.report"
+      },
+      {
+        "title": "Why Romania excels in international Olympiads",
+        "prob": 0.05296313762664795,
+        "points": 234,
+        "domain": "palladiummag.com"
+      },
+      {
+        "title": "Ecosia: The greenest AI is here",
+        "prob": 0.05581846460700035,
+        "points": 128,
+        "domain": "blog.ecosia.org"
+      },
+      {
+        "title": "GenAI FOMO has spurred businesses to light nearly $40B on fire",
+        "prob": 0.060585539788007736,
+        "points": 246,
+        "domain": "theregister.com"
+      },
+      {
+        "title": "Apple to focus on 'quality and underlying performance' with iOS 27 next year",
+        "prob": 0.06073250621557236,
+        "points": 123,
+        "domain": "9to5mac.com"
+      },
+      {
+        "title": "Israel committing genocide in Gaza, scholars group says",
+        "prob": 0.06588320434093475,
+        "points": 381,
+        "domain": "aljazeera.com"
+      },
+      {
+        "title": "Trump pardons convicted Binance founder",
+        "prob": 0.06902162730693817,
+        "points": 1055,
+        "domain": "wsj.com"
+      },
+      {
+        "title": "Trumpcard (Official US Government Website)",
+        "prob": 0.07747859507799149,
+        "points": 193,
+        "domain": "trumpcard.gov"
+      },
+      {
+        "title": "Peter Thiel sells off all Nvidia stock, stirring bubble fears",
+        "prob": 0.08027272671461105,
+        "points": 212,
+        "domain": "thestreet.com"
+      },
+      {
+        "title": "10M people watched a YouTuber shim a lock; the lock company sued him \u2013 bad idea",
+        "prob": 0.08184384554624557,
+        "points": 1587,
+        "domain": "arstechnica.com"
+      },
+      {
+        "title": "Mark Zuckerberg Had Illegal School at His Palo Alto Compound. Neighbors Revolted",
+        "prob": 0.08949873596429825,
+        "points": 121,
+        "domain": "wired.com"
+      },
+      {
+        "title": "PRC elites voice AI-skepticism",
+        "prob": 0.09390657395124435,
+        "points": 192,
+        "domain": "jamestown.org"
+      },
+      {
+        "title": "Why is Venus hell and Earth an Eden?",
+        "prob": 0.09472866356372833,
+        "points": 196,
+        "domain": "quantamagazine.org"
+      },
+      {
+        "title": "US economy added just 22,000 jobs in August, unemployment highest in 4 yrs",
+        "prob": 0.09657499194145203,
+        "points": 184,
+        "domain": "cnn.com"
+      }
+    ]
+  },
+  "segments": {
+    "by_title_length": {
+      "count": {
+        "<30": 597.0,
+        "30-50": 858.0,
+        "50-70": 986.0,
+        "70-100": 559.0,
+        "100+": 0.0
+      },
+      "actual_hit_rate": {
+        "<30": 0.5879396984924623,
+        "30-50": 0.5209790209790209,
+        "50-70": 0.4543610547667343,
+        "70-100": 0.4543828264758497,
+        "100+": NaN
+      },
+      "predicted_hit_rate": {
+        "<30": 0.43522217869758606,
+        "30-50": 0.3943573832511902,
+        "50-70": 0.3730752766132355,
+        "70-100": 0.33983227610588074,
+        "100+": NaN
+      },
+      "auc": {
+        "<30": 0.7100965881453687,
+        "30-50": 0.7520643163125895,
+        "50-70": 0.7805488250132767,
+        "70-100": 0.7973667226022976,
+        "100+": 0.5
+      }
+    },
+    "by_domain": {
+      "github.com": {
+        "count": 227,
+        "actual_hit_rate": 0.4933920704845815,
+        "predicted_hit_rate": 0.4503474235534668,
+        "auc": 0.7702639751552794
+      },
+      "": {
+        "count": 86,
+        "actual_hit_rate": 0.29069767441860467,
+        "predicted_hit_rate": 0.28873708844184875,
+        "auc": 0.7422950819672132
+      },
+      "nytimes.com": {
+        "count": 46,
+        "actual_hit_rate": 0.32608695652173914,
+        "predicted_hit_rate": 0.29111796617507935,
+        "auc": 0.9010752688172043
+      },
+      "youtube.com": {
+        "count": 45,
+        "actual_hit_rate": 0.24444444444444444,
+        "predicted_hit_rate": 0.2076350301504135,
+        "auc": 0.767379679144385
+      },
+      "theguardian.com": {
+        "count": 43,
+        "actual_hit_rate": 0.4418604651162791,
+        "predicted_hit_rate": 0.29956504702568054,
+        "auc": 0.7828947368421053
+      },
+      "arstechnica.com": {
+        "count": 29,
+        "actual_hit_rate": 0.4827586206896552,
+        "predicted_hit_rate": 0.34284573793411255,
+        "auc": 0.6857142857142857
+      },
+      "arxiv.org": {
+        "count": 26,
+        "actual_hit_rate": 0.38461538461538464,
+        "predicted_hit_rate": 0.3484634757041931,
+        "auc": 0.85625
+      },
+      "reuters.com": {
+        "count": 25,
+        "actual_hit_rate": 0.4,
+        "predicted_hit_rate": 0.2763749957084656,
+        "auc": 0.8866666666666667
+      },
+      "bbc.com": {
+        "count": 25,
+        "actual_hit_rate": 0.44,
+        "predicted_hit_rate": 0.30812710523605347,
+        "auc": 0.7662337662337662
+      },
+      "theregister.com": {
+        "count": 22,
+        "actual_hit_rate": 0.45454545454545453,
+        "predicted_hit_rate": 0.3715735375881195,
+        "auc": 0.6583333333333333
+      },
+      "en.wikipedia.org": {
+        "count": 20,
+        "actual_hit_rate": 0.2,
+        "predicted_hit_rate": 0.39702123403549194,
+        "auc": 0.5625
+      },
+      "twitter.com": {
+        "count": 18,
+        "actual_hit_rate": 0.5,
+        "predicted_hit_rate": 0.42399948835372925,
+        "auc": 0.8518518518518519
+      },
+      "nature.com": {
+        "count": 17,
+        "actual_hit_rate": 0.17647058823529413,
+        "predicted_hit_rate": 0.27825289964675903,
+        "auc": 0.7380952380952381
+      },
+      "quantamagazine.org": {
+        "count": 16,
+        "actual_hit_rate": 0.75,
+        "predicted_hit_rate": 0.5069403648376465,
+        "auc": 0.8958333333333334
+      },
+      "theverge.com": {
+        "count": 16,
+        "actual_hit_rate": 0.25,
+        "predicted_hit_rate": 0.3495296537876129,
+        "auc": 0.7708333333333334
+      },
+      "wsj.com": {
+        "count": 15,
+        "actual_hit_rate": 0.5333333333333333,
+        "predicted_hit_rate": 0.2580920457839966,
+        "auc": 0.7499999999999999
+      },
+      "blog.google": {
+        "count": 14,
+        "actual_hit_rate": 0.6428571428571429,
+        "predicted_hit_rate": 0.4803558886051178,
+        "auc": 0.9111111111111111
+      },
+      "old.reddit.com": {
+        "count": 13,
+        "actual_hit_rate": 0.3076923076923077,
+        "predicted_hit_rate": 0.2531626522541046,
+        "auc": 0.8333333333333334
+      },
+      "cnbc.com": {
+        "count": 13,
+        "actual_hit_rate": 0.6153846153846154,
+        "predicted_hit_rate": 0.2428344041109085,
+        "auc": 0.8250000000000001
+      },
+      "lwn.net": {
+        "count": 12,
+        "actual_hit_rate": 0.6666666666666666,
+        "predicted_hit_rate": 0.5005341172218323,
+        "auc": 1.0
+      }
+    },
+    "by_post_type": {
+      "Show HN": {
+        "count": 185,
+        "actual_hit_rate": 0.3027027027027027,
+        "predicted_hit_rate": 0.34713634848594666,
+        "auc": 0.8044019933554818
+      },
+      "Ask HN": {
+        "count": 45,
+        "actual_hit_rate": 0.28888888888888886,
+        "predicted_hit_rate": 0.22845113277435303,
+        "auc": 0.6274038461538463
+      },
+      "GitHub": {
+        "count": 292,
+        "actual_hit_rate": 0.5068493150684932,
+        "predicted_hit_rate": 0.4513612389564514,
+        "auc": 0.7713025525525525
+      },
+      "PDF": {
+        "count": 29,
+        "actual_hit_rate": 0.5172413793103449,
+        "predicted_hit_rate": 0.3313102424144745,
+        "auc": 0.9238095238095237
+      },
+      "Regular": {
+        "count": 2741,
+        "actual_hit_rate": 0.5165997811017876,
+        "predicted_hit_rate": 0.3910602927207947,
+        "auc": 0.7621794051806843
+      }
+    },
+    "by_points": {
+      "count": {
+        "1-10": 707.0,
+        "11-25": 165.0,
+        "26-50": 343.0,
+        "51-100": 292.0,
+        "101-200": 720.0,
+        "201-500": 590.0,
+        "500+": 183.0
+      },
+      "mean_prob": {
+        "1-10": 0.2783244550228119,
+        "11-25": 0.3037802278995514,
+        "26-50": 0.29010337591171265,
+        "51-100": 0.3638187050819397,
+        "101-200": 0.4588783383369446,
+        "201-500": 0.47974836826324463,
+        "500+": 0.4913730025291443
+      },
+      "std_prob": {
+        "1-10": 0.16198720037937164,
+        "11-25": 0.17728501558303833,
+        "26-50": 0.15985433757305145,
+        "51-100": 0.17257966101169586,
+        "101-200": 0.1613517850637436,
+        "201-500": 0.16296842694282532,
+        "500+": 0.15675275027751923
+      }
+    }
+  },
+  "calibration": {
+    "ece": 0.11466505705813565,
+    "bins": {
+      "count": {
+        "0": 224.0,
+        "1": 367.0,
+        "2": 352.0,
+        "3": 360.0,
+        "4": 381.0,
+        "5": 386.0,
+        "6": 397.0,
+        "7": 350.0,
+        "8": 177.0,
+        "9": 6.0
+      },
+      "mean_predicted": {
+        "0": 0.07586044818162918,
+        "1": 0.15321244299411774,
+        "2": 0.2306356281042099,
+        "3": 0.308569073677063,
+        "4": 0.3866572082042694,
+        "5": 0.46889787912368774,
+        "6": 0.5471412539482117,
+        "7": 0.6233538389205933,
+        "8": 0.690387487411499,
+        "9": 0.7693383097648621
+      },
+      "mean_actual": {
+        "0": 0.12053571428571429,
+        "1": 0.2016348773841962,
+        "2": 0.29261363636363635,
+        "3": 0.41388888888888886,
+        "4": 0.5065616797900262,
+        "5": 0.6010362694300518,
+        "6": 0.707808564231738,
+        "7": 0.8285714285714286,
+        "8": 0.8192090395480226,
+        "9": 1.0
+      },
+      "calibration_error": {
+        "0": 0.04467526610408511,
+        "1": 0.048422434390078456,
+        "2": 0.061978008259426454,
+        "3": 0.10531981521182587,
+        "4": 0.11990447158575679,
+        "5": 0.1321383903063641,
+        "6": 0.16066731028352632,
+        "7": 0.20521758965083536,
+        "8": 0.12882155213652358,
+        "9": 0.23066169023513794
+      }
+    },
+    "is_well_calibrated": false
+  },
+  "confidence": {
+    "high_confidence_rate": 0.21133333333333335,
+    "high_conf_accuracy": 0.8264984227129337,
+    "mean_confidence_when_correct": 0.697013770428729,
+    "mean_confidence_when_wrong": 0.6434859703042838,
+    "uncertain_rate": 0.326,
+    "uncertain_accuracy": 0.5766871165644172
+  },
+  "words": {
+    "high_hit_words": [
+      {
+        "word": "math",
+        "total": 11,
+        "hit_rate": 0.8181818181818182
+      },
+      {
+        "word": "should",
+        "total": 16,
+        "hit_rate": 0.8125
+      },
+      {
+        "word": "don",
+        "total": 25,
+        "hit_rate": 0.8
+      },
+      {
+        "word": "memory",
+        "total": 13,
+        "hit_rate": 0.7692307692307693
+      },
+      {
+        "word": "terminal",
+        "total": 13,
+        "hit_rate": 0.7692307692307693
+      },
+      {
+        "word": "launch",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "problem",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "youtube",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "solar",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "deal",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "css",
+        "total": 11,
+        "hit_rate": 0.7272727272727273
+      },
+      {
+        "word": "performance",
+        "total": 14,
+        "hit_rate": 0.7142857142857143
+      },
+      {
+        "word": "off",
+        "total": 21,
+        "hit_rate": 0.7142857142857143
+      },
+      {
+        "word": "android",
+        "total": 17,
+        "hit_rate": 0.7058823529411765
+      },
+      {
+        "word": "found",
+        "total": 10,
+        "hit_rate": 0.7
+      },
+      {
+        "word": "systems",
+        "total": 10,
+        "hit_rate": 0.7
+      },
+      {
+        "word": "openai",
+        "total": 20,
+        "hit_rate": 0.7
+      },
+      {
+        "word": "want",
+        "total": 10,
+        "hit_rate": 0.7
+      },
+      {
+        "word": "did",
+        "total": 10,
+        "hit_rate": 0.7
+      },
+      {
+        "word": "linux",
+        "total": 46,
+        "hit_rate": 0.6956521739130435
+      }
+    ],
+    "low_hit_words": [
+      {
+        "word": "content",
+        "total": 12,
+        "hit_rate": 0.16666666666666666
+      },
+      {
+        "word": "age",
+        "total": 12,
+        "hit_rate": 0.16666666666666666
+      },
+      {
+        "word": "trump",
+        "total": 22,
+        "hit_rate": 0.18181818181818182
+      },
+      {
+        "word": "streaming",
+        "total": 11,
+        "hit_rate": 0.18181818181818182
+      },
+      {
+        "word": "list",
+        "total": 10,
+        "hit_rate": 0.2
+      },
+      {
+        "word": "food",
+        "total": 10,
+        "hit_rate": 0.2
+      },
+      {
+        "word": "side",
+        "total": 10,
+        "hit_rate": 0.2
+      },
+      {
+        "word": "china",
+        "total": 10,
+        "hit_rate": 0.2
+      },
+      {
+        "word": "platform",
+        "total": 22,
+        "hit_rate": 0.22727272727272727
+      },
+      {
+        "word": "analysis",
+        "total": 12,
+        "hit_rate": 0.25
+      },
+      {
+        "word": "big",
+        "total": 16,
+        "hit_rate": 0.25
+      },
+      {
+        "word": "real",
+        "total": 20,
+        "hit_rate": 0.25
+      },
+      {
+        "word": "plugin",
+        "total": 11,
+        "hit_rate": 0.2727272727272727
+      },
+      {
+        "word": "post",
+        "total": 11,
+        "hit_rate": 0.2727272727272727
+      },
+      {
+        "word": "this",
+        "total": 18,
+        "hit_rate": 0.2777777777777778
+      },
+      {
+        "word": "life",
+        "total": 18,
+        "hit_rate": 0.2777777777777778
+      },
+      {
+        "word": "built",
+        "total": 39,
+        "hit_rate": 0.28205128205128205
+      },
+      {
+        "word": "show",
+        "total": 190,
+        "hit_rate": 0.3
+      },
+      {
+        "word": "music",
+        "total": 10,
+        "hit_rate": 0.3
+      },
+      {
+        "word": "developers",
+        "total": 10,
+        "hit_rate": 0.3
+      }
+    ],
+    "high_fp_words": [
+      {
+        "word": "brain",
+        "total": 10,
+        "fp_rate": 0.3
+      },
+      {
+        "word": "extension",
+        "total": 11,
+        "fp_rate": 0.2727272727272727
+      },
+      {
+        "word": "fast",
+        "total": 12,
+        "fp_rate": 0.25
+      },
+      {
+        "word": "power",
+        "total": 16,
+        "fp_rate": 0.25
+      },
+      {
+        "word": "server",
+        "total": 21,
+        "fp_rate": 0.23809523809523808
+      },
+      {
+        "word": "programming",
+        "total": 17,
+        "fp_rate": 0.23529411764705882
+      },
+      {
+        "word": "working",
+        "total": 13,
+        "fp_rate": 0.23076923076923078
+      },
+      {
+        "word": "web",
+        "total": 35,
+        "fp_rate": 0.22857142857142856
+      },
+      {
+        "word": "platform",
+        "total": 22,
+        "fp_rate": 0.22727272727272727
+      },
+      {
+        "word": "python",
+        "total": 30,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "music",
+        "total": 10,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "down",
+        "total": 20,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "europe",
+        "total": 10,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "under",
+        "total": 15,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "stack",
+        "total": 10,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "based",
+        "total": 20,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "ban",
+        "total": 10,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "keep",
+        "total": 10,
+        "fp_rate": 0.2
+      },
+      {
+        "word": "time",
+        "total": 31,
+        "fp_rate": 0.1935483870967742
+      },
+      {
+        "word": "network",
+        "total": 16,
+        "fp_rate": 0.1875
+      }
+    ],
+    "high_fn_words": [
+      {
+        "word": "privacy",
+        "total": 16,
+        "fn_rate": 0.625
+      },
+      {
+        "word": "off",
+        "total": 21,
+        "fn_rate": 0.5714285714285714
+      },
+      {
+        "word": "solar",
+        "total": 11,
+        "fn_rate": 0.5454545454545454
+      },
+      {
+        "word": "deal",
+        "total": 11,
+        "fn_rate": 0.5454545454545454
+      },
+      {
+        "word": "court",
+        "total": 11,
+        "fn_rate": 0.5454545454545454
+      },
+      {
+        "word": "chat",
+        "total": 10,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "isn",
+        "total": 10,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "cli",
+        "total": 12,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "play",
+        "total": 10,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "want",
+        "total": 10,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "testing",
+        "total": 10,
+        "fn_rate": 0.5
+      },
+      {
+        "word": "chatgpt",
+        "total": 17,
+        "fn_rate": 0.47058823529411764
+      },
+      {
+        "word": "best",
+        "total": 15,
+        "fn_rate": 0.4666666666666667
+      },
+      {
+        "word": "problem",
+        "total": 11,
+        "fn_rate": 0.45454545454545453
+      },
+      {
+        "word": "review",
+        "total": 11,
+        "fn_rate": 0.45454545454545453
+      },
+      {
+        "word": "openai",
+        "total": 20,
+        "fn_rate": 0.45
+      },
+      {
+        "word": "developer",
+        "total": 18,
+        "fn_rate": 0.4444444444444444
+      },
+      {
+        "word": "year",
+        "total": 23,
+        "fn_rate": 0.43478260869565216
+      },
+      {
+        "word": "control",
+        "total": 14,
+        "fn_rate": 0.42857142857142855
+      },
+      {
+        "word": "get",
+        "total": 19,
+        "fn_rate": 0.42105263157894735
+      }
+    ]
+  }
+}

@@ -179,3 +179,14 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+.ds_store
+Thumbs.db
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*.rej
+*~
