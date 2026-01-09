@@ -190,3 +190,14 @@ Thumbs.db
 *.orig
 *.rej
 *~
+# ML Model files (too large for git)
+rss_reader/models/
+archive/
+
+# Generated/data files
+*.db
+feed_data.jsonl
+feed_export.html
+sentiment_data.json
+dashboard.html
+test_titles.py

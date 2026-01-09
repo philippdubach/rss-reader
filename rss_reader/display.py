@@ -75,8 +75,40 @@ def get_feed_color(feed_name: str) -> str:
     return colors[index]
 
 
-def display_entries(entries: list[dict], title: str = "Feed Entries"):
-    """Display entries in a formatted table."""
+def get_score_display(score: Optional[float]) -> tuple[str, str]:
+    """Get score display text and color.
+    
+    Args:
+        score: HN score (0.0-1.0) or None
+        
+    Returns:
+        Tuple of (display text, style)
+    """
+    if score is None:
+        return "-", "dim"
+    
+    # Color based on probability thresholds
+    if score >= 0.5:
+        style = "bold green"
+    elif score >= 0.3:
+        style = "yellow"
+    elif score >= 0.15:
+        style = "dim"
+    else:
+        style = "dim red"
+    
+    # Format as percentage
+    return f"{score*100:.0f}%", style
+
+
+def display_entries(entries: list[dict], title: str = "Feed Entries", show_scores: bool = False):
+    """Display entries in a formatted table.
+    
+    Args:
+        entries: List of entry dicts
+        title: Table title
+        show_scores: Whether to show HN score column
+    """
     if not entries:
         console.print("[yellow]No entries to display.[/yellow]")
         return
@@ -90,15 +122,18 @@ def display_entries(entries: list[dict], title: str = "Feed Entries"):
     )
     
     table.add_column("#", style="dim", width=4)
-    table.add_column("Feed", style="bold", width=20)
-    table.add_column("Title", width=50)
+    if show_scores:
+        table.add_column("HN", justify="right", width=5)
+    table.add_column("Feed", style="bold", width=18)
+    table.add_column("Title", width=48 if show_scores else 50)
     table.add_column("Date", width=12)
-    table.add_column("Status", width=6)
+    table.add_column("", width=3)  # Status column (narrower)
     
     for i, entry in enumerate(entries, 1):
-        feed_name = truncate(entry.get('feed_name', 'Unknown'), 18)
+        feed_name = truncate(entry.get('feed_name', 'Unknown'), 16)
         feed_color = get_feed_color(feed_name)
-        title_text = truncate(entry.get('title', 'Untitled'), 48)
+        max_title_len = 46 if show_scores else 48
+        title_text = truncate(entry.get('title', 'Untitled'), max_title_len)
         date_str = format_date(entry.get('published'))
         
         # Status indicators
@@ -111,13 +146,21 @@ def display_entries(entries: list[dict], title: str = "Feed Entries"):
         else:
             title_style = "dim"
         
-        table.add_row(
-            str(i),
+        # Build row
+        row = [str(i)]
+        
+        if show_scores:
+            score_text, score_style = get_score_display(entry.get('hn_score'))
+            row.append(Text(score_text, style=score_style))
+        
+        row.extend([
             Text(feed_name, style=feed_color),
             Text(title_text, style=title_style),
             date_str,
             Text(status, style="yellow"),
-        )
+        ])
+        
+        table.add_row(*row)
     
     console.print(table)
 

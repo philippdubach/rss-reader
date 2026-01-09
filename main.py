@@ -132,27 +132,60 @@ def cmd_refresh(args, storage: FeedStorage):
     display_info("Saving to database...")
     save_result = storage.process_fetch_results(results)
     display_success(f"Saved {save_result['new_entries']} new entries, updated {save_result['updated_entries']}")
+    
+    # Score entries with HN predictor (unless --no-score flag)
+    if not getattr(args, 'no_score', False):
+        try:
+            from rss_reader.hn_predictor import get_predictor
+            
+            # Get entries without scores
+            unscored = storage.get_entries_without_scores()
+            if unscored:
+                display_info(f"Scoring {len(unscored)} entries with HN predictor...")
+                predictor = get_predictor()
+                titles = [e['title'] for e in unscored]
+                scores = predictor.predict_batch(titles)
+                
+                # Update scores in DB
+                score_map = {e['id']: s for e, s in zip(unscored, scores)}
+                storage.update_hn_scores(score_map)
+                display_success(f"Scored {len(scores)} entries")
+        except ImportError as e:
+            display_info(f"[dim]HN predictor not available: {e}[/dim]")
+        except Exception as e:
+            display_error(f"Scoring failed: {e}")
 
 
 def cmd_list(args, storage: FeedStorage):
     """List entries."""
+    sort_by_score = getattr(args, 'sort_by_score', False)
+    show_scores = getattr(args, 'show_scores', False) or sort_by_score
+    hours = getattr(args, 'hours', None)
+    
     entries = storage.get_entries(
         feed_url=args.feed,
         unread_only=args.unread,
         starred_only=args.starred,
         limit=args.limit,
         search=args.search,
+        sort_by_score=sort_by_score,
+        hours=hours,
     )
     
     title = "Feed Entries"
-    if args.unread:
+    if sort_by_score:
+        if hours:
+            title = f"Top Entries (last {hours}h)"
+        else:
+            title = "Top Entries (by HN Score)"
+    elif args.unread:
         title = "Unread Entries"
     elif args.starred:
         title = "Starred Entries"
     elif args.search:
         title = f"Search: {args.search}"
     
-    display_entries(entries, title=title)
+    display_entries(entries, title=title, show_scores=show_scores)
     
     if entries:
         console.print(f"\n[dim]Showing {len(entries)} entries. Use --limit to see more.[/dim]")
@@ -235,6 +268,71 @@ def cmd_export_sentiment(args, storage: FeedStorage):
     output_path = args.output or "rss_sentiment.json"
     path = export_for_sentiment_analysis(entries, output_path)
     display_success(f"Exported {len(entries)} entries for sentiment analysis to {path}")
+
+
+def cmd_dashboard(args, storage: FeedStorage):
+    """Generate HTML dashboard with top entries and HN status."""
+    from rss_reader.hn_checker import check_hn_batch
+    from rss_reader.dashboard import generate_dashboard
+    from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
+    
+    hours = args.hours
+    limit = args.limit
+    
+    # Get top entries from the last N hours
+    display_info(f"Fetching top {limit} entries from last {hours} hours...")
+    entries = storage.get_entries(
+        sort_by_score=True,
+        hours=hours,
+        limit=limit,
+    )
+    
+    if not entries:
+        display_error(f"No entries found in the last {hours} hours. Run 'refresh' first.")
+        return
+    
+    display_success(f"Found {len(entries)} entries")
+    
+    # Check HN status for each entry
+    urls = [e.get('link', '') for e in entries if e.get('link')]
+    
+    display_info(f"Checking {len(urls)} URLs against Hacker News...")
+    
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TextColumn("{task.completed}/{task.total}"),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Checking HN...", total=len(urls))
+        
+        def update_progress(completed, total):
+            progress.update(task, completed=completed)
+        
+        hn_results = check_hn_batch(urls, progress_callback=update_progress)
+    
+    # Count results
+    posted_count = sum(1 for r in hn_results.values() if r is not None)
+    display_success(f"Found {posted_count} already posted to HN, {len(urls) - posted_count} not yet posted")
+    
+    # Generate dashboard
+    output_path = args.output or "dashboard.html"
+    display_info("Generating dashboard...")
+    
+    path = generate_dashboard(
+        entries=entries,
+        hn_results=hn_results,
+        hours=hours,
+        output_path=output_path,
+    )
+    
+    display_success(f"Dashboard generated: {path}")
+    
+    # Open in browser if requested
+    if args.open:
+        import webbrowser
+        webbrowser.open(f"file://{path.absolute()}")
 
 
 def cmd_mark_read(args, storage: FeedStorage):
@@ -364,6 +462,7 @@ def main():
     refresh_parser.add_argument('--csv', '-c', help='Path to feeds.csv file')
     refresh_parser.add_argument('--workers', '-w', type=int, default=10, help='Number of worker threads')
     refresh_parser.add_argument('--timeout', '-t', type=int, default=15, help='Request timeout in seconds')
+    refresh_parser.add_argument('--no-score', action='store_true', help='Skip HN scoring')
     
     # Web server command
     web_parser = subparsers.add_parser('web', help='Start web interface for managing feeds')
@@ -378,6 +477,18 @@ def main():
     list_parser.add_argument('--starred', '-s', action='store_true', help='Show only starred')
     list_parser.add_argument('--limit', '-l', type=int, default=20, help='Maximum entries to show')
     list_parser.add_argument('--search', help='Search in title/content')
+    list_parser.add_argument('--sort-by-score', '--top', action='store_true', help='Sort by HN score (highest first)')
+    list_parser.add_argument('--show-scores', action='store_true', help='Show HN scores column')
+    list_parser.add_argument('--hours', type=int, help='Only show entries from last N hours')
+    
+    # Top command (alias for list --top)
+    top_parser = subparsers.add_parser('top', help='Show top entries by HN score')
+    top_parser.add_argument('--feed', help='Filter by feed URL')
+    top_parser.add_argument('--unread', '-u', action='store_true', help='Show only unread')
+    top_parser.add_argument('--starred', '-s', action='store_true', help='Show only starred')
+    top_parser.add_argument('--limit', '-l', type=int, default=20, help='Maximum entries to show')
+    top_parser.add_argument('--search', help='Search in title/content')
+    top_parser.add_argument('--hours', type=int, default=24, help='Only show entries from last N hours (default: 24)')
     
     # Read command
     read_parser = subparsers.add_parser('read', help='Read a specific entry')
@@ -404,6 +515,13 @@ def main():
     sentiment_parser = subparsers.add_parser('export-sentiment', help='Export for sentiment analysis')
     sentiment_parser.add_argument('--output', '-o', help='Output file path')
     
+    # Dashboard command
+    dashboard_parser = subparsers.add_parser('dashboard', help='Generate HTML dashboard with top entries and HN status')
+    dashboard_parser.add_argument('--hours', type=int, default=24, help='Show entries from last N hours (default: 24)')
+    dashboard_parser.add_argument('--limit', '-l', type=int, default=50, help='Maximum entries to show (default: 50)')
+    dashboard_parser.add_argument('--output', '-o', default='dashboard.html', help='Output file path')
+    dashboard_parser.add_argument('--open', action='store_true', help='Open dashboard in browser')
+    
     # Mark read command
     mark_parser = subparsers.add_parser('mark-read', help='Mark entries as read')
     mark_parser.add_argument('--all', '-a', action='store_true', help='Mark all as read')
@@ -422,6 +540,11 @@ def main():
         cmd_refresh(args, storage)
     elif args.command == 'list':
         cmd_list(args, storage)
+    elif args.command == 'top':
+        # Top is an alias for list --top
+        args.sort_by_score = True
+        args.show_scores = True
+        cmd_list(args, storage)
     elif args.command == 'read':
         cmd_read(args, storage)
     elif args.command == 'feeds':
@@ -436,6 +559,8 @@ def main():
         cmd_export_html(args, storage)
     elif args.command == 'export-sentiment':
         cmd_export_sentiment(args, storage)
+    elif args.command == 'dashboard':
+        cmd_dashboard(args, storage)
     elif args.command == 'mark-read':
         cmd_mark_read(args, storage)
     elif args.command == 'web':

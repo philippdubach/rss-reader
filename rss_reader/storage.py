@@ -133,10 +133,17 @@ class FeedStorage:
                     tags TEXT,
                     is_read INTEGER DEFAULT 0,
                     is_starred INTEGER DEFAULT 0,
+                    hn_score REAL,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (feed_url) REFERENCES feeds(url)
                 )
             """)
+            
+            # Migration: Add hn_score column if it doesn't exist
+            cursor.execute("PRAGMA table_info(entries)")
+            columns = [col[1] for col in cursor.fetchall()]
+            if 'hn_score' not in columns:
+                cursor.execute("ALTER TABLE entries ADD COLUMN hn_score REAL")
             
             # Index for faster queries
             cursor.execute("""
@@ -147,6 +154,9 @@ class FeedStorage:
             """)
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_entries_is_read ON entries(is_read)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_entries_hn_score ON entries(hn_score DESC)
             """)
     
     def save_feed(self, url: str, name: str, discovered: bool = False,
@@ -225,6 +235,33 @@ class FeedStorage:
         
         return new_count, updated_count
     
+    def update_hn_scores(self, scores: dict[str, float]):
+        """Update HN scores for entries.
+        
+        Args:
+            scores: Dict mapping entry ID to HN score
+        """
+        if not scores:
+            return
+        
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            for entry_id, score in scores.items():
+                cursor.execute(
+                    "UPDATE entries SET hn_score = ? WHERE id = ?",
+                    (score, entry_id)
+                )
+    
+    def get_entries_without_scores(self, limit: int = 1000) -> list[dict]:
+        """Get entries that don't have HN scores yet."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id, title FROM entries WHERE hn_score IS NULL LIMIT ?",
+                (limit,)
+            )
+            return [dict(row) for row in cursor.fetchall()]
+    
     def process_fetch_results(self, results: list[FetchResult]) -> dict:
         """Process fetch results and save to database."""
         total_new = 0
@@ -260,8 +297,21 @@ class FeedStorage:
         limit: int = 100,
         offset: int = 0,
         search: Optional[str] = None,
+        sort_by_score: bool = False,
+        hours: Optional[int] = None,
     ) -> list[dict]:
-        """Get entries with optional filtering."""
+        """Get entries with optional filtering.
+        
+        Args:
+            feed_url: Filter by feed URL
+            unread_only: Only show unread entries
+            starred_only: Only show starred entries
+            limit: Maximum number of entries
+            offset: Offset for pagination
+            search: Search term for title/summary/content
+            sort_by_score: Sort by HN score (descending) instead of date
+            hours: Only show entries from the last N hours
+        """
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
@@ -283,7 +333,16 @@ class FeedStorage:
                 search_term = f"%{search}%"
                 params.extend([search_term, search_term, search_term])
             
-            query += " ORDER BY published DESC NULLS LAST LIMIT ? OFFSET ?"
+            if hours:
+                from datetime import datetime, timedelta
+                cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
+                query += " AND published > ?"
+                params.append(cutoff)
+            
+            if sort_by_score:
+                query += " ORDER BY hn_score DESC NULLS LAST, published DESC NULLS LAST LIMIT ? OFFSET ?"
+            else:
+                query += " ORDER BY published DESC NULLS LAST LIMIT ? OFFSET ?"
             params.extend([limit, offset])
             
             cursor.execute(query, params)
