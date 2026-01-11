@@ -209,3 +209,5 @@ feeds.csv
 # Temporary files
 *.DS_Store
 
+/docs
+/scripts
