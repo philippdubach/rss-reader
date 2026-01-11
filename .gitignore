@@ -190,8 +190,10 @@ Thumbs.db
 *.orig
 *.rej
 *~
-# ML Model files (too large for git)
+# ML Model files (download from HuggingFace)
 rss_reader/models/
+
+# Training notebooks (historical, not needed for usage)
 archive/
 
 # Generated/data files
@@ -200,4 +202,10 @@ feed_data.jsonl
 feed_export.html
 sentiment_data.json
 dashboard.html
-test_titles.py
+
+# User feeds (use your own)
+feeds.csv
+
+# Temporary files
+*.DS_Store
+

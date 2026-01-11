@@ -1,7 +1,14 @@
-"""HN Success Predictor using RoBERTa transformer model (V3.2).
+"""HN Success Predictor using RoBERTa transformer model (V7).
 
 Predicts the probability that a post title will be successful on Hacker News
 (>100 points). Uses a fine-tuned RoBERTa model with isotonic calibration.
+
+V7 improvements over V6:
+- RoBERTa-only (dropped SBERT which added no value)
+- Increased regularization (dropout 0.2, weight decay 0.05)
+- Reduced overfitting (gap reduced from 0.109 to 0.042)
+- Simpler deployment, faster inference
+- AUC ~0.685 with better generalization
 """
 
 import json
@@ -24,7 +31,7 @@ class HNPredictor:
     """
     
     # Default model path relative to this file
-    DEFAULT_MODEL_PATH = Path(__file__).parent / "models" / "hn_model_v32"
+    DEFAULT_MODEL_PATH = Path(__file__).parent / "models" / "hn_model_v7"
     
     def __init__(self, model_path: Optional[Path] = None):
         """Initialize the predictor.
@@ -72,12 +79,20 @@ class HNPredictor:
         self._model.to(self._device)
         self._model.eval()
         
-        # Load isotonic calibrator
-        calibrator_path = self.model_path / "isotonic_calibrator.joblib"
-        if calibrator_path.exists():
-            self._calibrator = joblib.load(calibrator_path)
+        # Load calibrator (isotonic or platt)
+        isotonic_path = self.model_path / "isotonic_calibrator.joblib"
+        platt_path = self.model_path / "platt_calibrator.joblib"
+        
+        if isotonic_path.exists():
+            self._calibrator = joblib.load(isotonic_path)
+            self._calibrator_type = "isotonic"
             logger.info("Loaded isotonic calibrator")
+        elif platt_path.exists():
+            self._calibrator = joblib.load(platt_path)
+            self._calibrator_type = "platt"
+            logger.info("Loaded Platt calibrator")
         else:
+            self._calibrator_type = None
             logger.warning("No calibrator found, using raw probabilities")
         
         self._loaded = True
@@ -129,12 +144,17 @@ class HNPredictor:
             # Inference
             with torch.no_grad():
                 outputs = self._model(**inputs)
-                logits = outputs.logits[:, 1]  # Positive class logits
-                probs = torch.sigmoid(logits).cpu().numpy()
+                # Use softmax for 2-class output
+                probs = torch.softmax(outputs.logits, dim=-1)[:, 1].cpu().numpy()
             
-            # Apply isotonic calibration if available
+            # Apply calibration if available
             if self._calibrator is not None:
-                probs = self._calibrator.predict(probs)
+                if self._calibrator_type == "platt":
+                    # Platt uses predict_proba
+                    probs = self._calibrator.predict_proba(probs.reshape(-1, 1))[:, 1]
+                else:
+                    # Isotonic uses predict
+                    probs = self._calibrator.predict(probs)
             
             all_probs.extend(probs.tolist())
         
